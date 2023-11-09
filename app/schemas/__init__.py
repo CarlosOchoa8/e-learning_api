@@ -14,5 +14,6 @@ from .course import (
     CourseBaseSchema,
     CourseCreateSchema,
     CourseUpdateSchema,
-    CourseInDBSchema
+    CourseInDBSchema,
+    CoursesInDBSchema
 )
