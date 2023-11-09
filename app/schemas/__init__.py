@@ -9,3 +9,10 @@ from .user import (
     UsersInDBSchema,
     Token,
 )
+
+from .course import (
+    CourseBaseSchema,
+    CourseCreateSchema,
+    CourseUpdateSchema,
+    CourseInDBSchema
+)
