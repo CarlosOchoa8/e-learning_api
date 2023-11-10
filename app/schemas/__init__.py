@@ -17,3 +17,11 @@ from .course import (
     CourseInDBSchema,
     CoursesInDBSchema
 )
+
+from .lesson import (
+    LessonBaseSchema,
+    LessonCreateSchema,
+    LessonUpdateSchema,
+    LessonInDBSchema,
+    LessonsInDBSchema
+)
