@@ -25,3 +25,11 @@ from .lesson import (
     LessonInDBSchema,
     LessonsInDBSchema
 )
+
+from .lesson_file import (
+    LessonFileBaseSchema,
+    LessonFileCreateSchema,
+    LessonFileUpdateSchema,
+    LessonFileInDBSchema,
+    LessonFilesInDBSchema
+)

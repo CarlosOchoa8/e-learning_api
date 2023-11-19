@@ -2,6 +2,7 @@ from app.endpoints import (
     user_router,
     course_router,
     lesson_router,
+    lesson_file_router
 )
 from fastapi import APIRouter
 
@@ -26,5 +27,12 @@ api_router.include_router(
     router=lesson_router,
     prefix='/lessons',
     tags=['lessons'],
+    responses={418: {'description': 'I"m a teapot =)'}}
+)
+
+api_router.include_router(
+    router=lesson_file_router,
+    prefix='/lesson_files',
+    tags=['lesson_files'],
     responses={418: {'description': 'I"m a teapot =)'}}
 )

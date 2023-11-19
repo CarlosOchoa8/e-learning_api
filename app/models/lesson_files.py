@@ -3,18 +3,17 @@ from sqlalchemy.orm import relationship
 from app.config.database.base_class import Base
 
 
-class Lesson(Base):
+class LessonFile(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-    content = Column(Integer, nullable=False)
-    description = Column(Integer, nullable=False)
-    course_id = Column(Integer, ForeignKey('course.id'))
+    file = Column(Integer, nullable=False)
+    description = Column(String, nullable=False)
+    lesson_id = Column(Integer, ForeignKey('lesson.id'))
 
-    course = relationship("Course", back_populates='lesson')
-    lesson_file = relationship("LessonFile", back_populates='lesson')
+    lesson = relationship('Lesson', back_populates='lesson_file')
 
     def __repr__(self) -> str:
         return (f'<{self.id},'
                 f'{self.name},'
-                f'{self.description}>'
+                f'{self.file}>'
                 )
