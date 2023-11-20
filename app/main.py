@@ -1,5 +1,8 @@
-from app.api.routers import api_router
+import os
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from app.api.routers import api_router
+from app.config.statics import statics
 
 fastapi_app = FastAPI(
     title='e-learning_api',
@@ -12,4 +15,7 @@ fastapi_app.include_router(
     prefix='/api/v1'
 )
 
+fastapi_app.mount(
+    '/statics', StaticFiles(directory=statics, html=True), name='statics'
+)
 app = fastapi_app

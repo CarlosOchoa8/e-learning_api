@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
-from typing import Generic, TypeVar, Type, Dict, Any
+from typing import Generic, TypeVar, Type, Any, List
 from .base_class import Base
 
 ModelType = TypeVar('ModelType', bound=Base)
@@ -48,6 +48,6 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """Get a single ModelType filtered by id"""
         return db.query(self.model).filter(self.model.id == id).first()
 
-    def get_multi(self, db: Session):
+    def get_multi(self, db: Session) -> List[ModelType]:
         """Get al ModelTypes objects"""
         return db.query(self.model).all()
