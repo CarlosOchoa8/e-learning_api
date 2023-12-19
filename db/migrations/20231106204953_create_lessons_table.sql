@@ -3,7 +3,7 @@ CREATE TABLE "lesson"
 (
    id integer generated always as identity primary key,
    name varchar(255) not null,
-   content varchar(255) not null,
+   content TEXT not null,
    description varchar(255) not null,
    course_id integer not null,
 
