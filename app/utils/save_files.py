@@ -2,17 +2,20 @@ import os
 import slugify
 import mimetypes
 from fastapi import UploadFile, File, HTTPException
+from app.config.statics import statics
 
 
 async def save_files_to_static(
-        upload_file: UploadFile = File(default=None)
+        course: str,
+        upload_file: UploadFile = File(default=None),
 ) -> str:
-    # Save images in folder statics
+    # Save images their folders course name
     valid_image_types = [
         "image/jpeg",
         "image/jpg",
         "image/png",
         "image/svg+xml",
+        "application/pdf"
     ]
     try:
         lesson_file_name = []
@@ -24,11 +27,10 @@ async def save_files_to_static(
                         status_code=400, detail="The type of file is not allowed."
                     )
 
-            directory_single = "media"
-            if not os.path.exists(directory_single):
-                os.mkdir(directory_single)
+            if not os.path.exists(f'{statics}/{course}'):
+                os.mkdir(f'{statics}/{course}')
             directory_full = (
-                f"{directory_single}/"
+                f"{statics}/{course}/"
             )
             contents = await image.read()
             image_extension = os.path.splitext(image.filename)[1]
@@ -44,4 +46,4 @@ async def save_files_to_static(
         raise HTTPException(
             status_code=400,
             detail=f"Some goes wrong while saving the file(s). {e}"
-        )
+        )from e

@@ -30,5 +30,10 @@ class LessonFileInDBSchema(LessonFileBaseSchema):
         from_attributes = True
 
 
+class LessonFilesSchema(BaseModel):
+    id: int
+    file: str
+
+
 class LessonFilesInDBSchema(BaseModel):
     files: list[LessonFileInDBSchema]

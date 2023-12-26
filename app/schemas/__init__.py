@@ -31,5 +31,6 @@ from .lesson_file import (
     LessonFileCreateSchema,
     LessonFileUpdateSchema,
     LessonFileInDBSchema,
+    LessonFilesSchema,
     LessonFilesInDBSchema
 )
