@@ -33,10 +33,10 @@ def update(lesson_file_in: schemas.LessonFileUpdateSchema, file_id: int, db: Ses
 
 
 @router.get('/detail/{lesson_id}', description="Get lesson's files detail.",
-            response_model=schemas.LessonFileInDBSchema)
+            response_model=list[schemas.LessonFilesSchema])
 def get(lesson_id: int, db: Session = Depends(get_db)):
     if files := crud.lesson_file.get(id=lesson_id, db=db):
-        return schemas.LessonFileInDBSchema(**files.__dict__)
+        return files
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
         detail='lesson files does not exists.'
