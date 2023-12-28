@@ -41,7 +41,7 @@ class CRUDLessonFile(CRUDBase[LessonFileModel, schemas.LessonFileCreateSchema, s
         api_domain = app_settings.API_DOMAIN
         schema_response = [schemas.LessonFilesSchema(
             id=item.id,
-            file=f"{api_domain}{item.file.strip('{}')}") for item in lesson_files]
+            file=f"{api_domain}statics/{item.lesson.course.name}/{item.file.strip('{}')}") for item in lesson_files]
         return schema_response  # type: ignore
 
 
