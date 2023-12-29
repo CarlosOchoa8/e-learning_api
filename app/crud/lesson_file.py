@@ -2,14 +2,17 @@
 Generate an Object of CRUD
 """
 from typing import Any
-from sqlalchemy.orm import Session
+
+import slugify
 from fastapi import File, UploadFile
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy.orm import Session
+
 from app import schemas, crud
-from app.utils.save_files import save_files_to_static
-from app.models.lesson_files import LessonFile as LessonFileModel
-from app.config.database.crud_base import CRUDBase, CreateSchemaType, ModelType
 from app.config.common import Settings
+from app.config.database.crud_base import CRUDBase, CreateSchemaType, ModelType
+from app.models.lesson_files import LessonFile as LessonFileModel
+from app.utils.save_files import save_files_to_static
 
 
 class CRUDLessonFile(CRUDBase[LessonFileModel, schemas.LessonFileCreateSchema, schemas.LessonFileUpdateSchema]):
@@ -39,10 +42,13 @@ class CRUDLessonFile(CRUDBase[LessonFileModel, schemas.LessonFileCreateSchema, s
         lesson_files = db.query(self.model).filter(self.model.lesson_id == id).all()
         app_settings = Settings()
         api_domain = app_settings.API_DOMAIN
-        schema_response = [schemas.LessonFilesSchema(
-            id=item.id,
-            file=f"{api_domain}statics/{item.lesson.course.name}/{item.file.strip('{}')}") for item in lesson_files]
-        return schema_response  # type: ignore
+        return [  # type: ignore
+            schemas.LessonFilesSchema(
+                id=item.id,
+                file=f"{api_domain}statics/{slugify.slugify(f'{item.lesson.course.name}')}/{item.file.strip('{}')}",
+            )
+            for item in lesson_files
+        ]
 
 
 lesson_file = CRUDLessonFile(LessonFileModel)
