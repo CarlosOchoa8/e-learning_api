@@ -26,11 +26,10 @@ async def save_files_to_static(
                     raise HTTPException(
                         status_code=400, detail="The type of file is not allowed."
                     )
-
-            if not os.path.exists(f'{statics}/{course}'):
-                os.mkdir(f'{statics}/{course}')
+            if not os.path.exists(f"{statics}/{slugify.slugify(f'{course}')}"):
+                os.mkdir(f"{statics}/{slugify.slugify(f'{course}')}")
             directory_full = (
-                f"{statics}/{course}/"
+                f"{statics}/{slugify.slugify(f'{course}')}/"
             )
             contents = await image.read()
             image_extension = os.path.splitext(image.filename)[1]
