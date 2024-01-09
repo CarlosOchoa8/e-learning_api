@@ -34,3 +34,9 @@ from .lesson_file import (
     LessonFilesSchema,
     LessonFilesInDBSchema
 )
+
+from .progress import (
+    LessonProgressCreate,
+    LessonProgressUpdate,
+    LessonProgressInDB
+)

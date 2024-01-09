@@ -12,6 +12,7 @@ class Lesson(Base):
 
     course = relationship("Course", back_populates='lesson')
     lesson_file = relationship("LessonFile", back_populates='lesson')
+    lesson_progress = relationship("Progress", back_populates="lesson")
 
     def __repr__(self) -> str:
         return (f'<{self.id},'
