@@ -10,6 +10,7 @@ class Course(Base):
     description = Column(String, nullable=False)
 
     lesson = relationship('Lesson', back_populates='course')
+    user_course = relationship("UserCourse", back_populates="course")
 
     def __repr__(self) -> str:
         return (f'<{self.id},'

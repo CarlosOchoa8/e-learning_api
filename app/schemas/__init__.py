@@ -40,3 +40,9 @@ from .progress import (
     LessonProgressUpdate,
     LessonProgressInDB
 )
+
+from .user_course import (
+    UserCourseBaseSchema,
+    UserCourseCreateSchema,
+    UserCourseUpdateSchema,
+)

@@ -25,3 +25,4 @@ websockets==11.0.3
 sqlalchemy==2.0.19
 psycopg2-binary==2.9.9
 passlib==1.7.4
+pendulum==3.0.0

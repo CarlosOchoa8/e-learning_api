@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer
+from sqlalchemy.orm import relationship
 from app.config.database.base_class import Base
 
 
@@ -11,6 +12,8 @@ class User(Base):
     email = Column(String, nullable=False)
     phone_number = Column(Integer, nullable=False)
     user_type = Column(String, nullable=False)
+
+    user_course = relationship("UserCourse", back_populates="user")
 
     def __repr__(self) -> str:
         return (f'<{self.id},'
