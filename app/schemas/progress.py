@@ -21,3 +21,4 @@ class LessonProgressUpdate(LessonProgressBase):
 
 class LessonProgressInDB(BaseModel):
     lesson_completed: bool
+
