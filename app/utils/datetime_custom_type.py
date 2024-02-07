@@ -20,5 +20,5 @@ class CustomDateTime(TypeDecorator):
         Process bind param
         """
         if type(value) is str:
-            return pendulum.from_format(value, "YYYY-MM-DDTHH:mm:ss.SSSSSSZ")
+            return pendulum.from_format(value, "YYYY-MM-DDTHH:mm:ss.SSSSSS[Z]")
         return value

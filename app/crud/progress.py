@@ -41,5 +41,42 @@ class CRUDProgress(CRUDBase[Progress, schemas.LessonProgressCreate, schemas.Less
         )
         return f"{round((completed_lessons / total_lessons) * 100 if total_lessons > 0 else 0, 2)}%"
 
+    def get_user_statistics(self, user_id: int, db: Session):
+        # get completed lessons
+        completed_lessons = (
+            db.query(Progress.lesson_id)
+            .filter_by(user_id=user_id, lesson_completed=True)
+            .distinct()
+            .subquery()
+        )
+        # get lessons registered by course
+        total_lessons_by_course = (
+            db.query(models.Lesson.course_id, func.count(models.Lesson.id).label("total_lessons"))
+            .group_by(models.Lesson.course_id)
+            .all()
+        )
+
+        # get lessons completed by course
+        completed_lessons_by_course = (
+            db.query(models.Lesson.course_id, func.count(Progress.lesson_id).label("completed_lessons"))
+            .join(Progress)
+            .filter(Progress.lesson_id.in_(completed_lessons))
+            .group_by(models.Lesson.course_id)
+            .all()
+        )
+
+        progress_by_course = []
+        for total, completed in zip(total_lessons_by_course, completed_lessons_by_course):
+            course_id = total[0]
+            total_lessons = total[1]
+            completed_lessons = completed[1]
+            progress_ = (
+                (completed_lessons / total_lessons) * 100
+                if total_lessons > 0
+                else 0
+            )
+            progress_by_course.append({"course_id": course_id, "progress": f"{progress_} %"})
+        return progress_by_course
+
 
 progress = CRUDProgress(Progress)

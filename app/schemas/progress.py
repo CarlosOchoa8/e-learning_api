@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from datetime import datetime
+import pendulum
+from pydantic import BaseModel, Field
 
 
 class LessonProgressBase(BaseModel):
@@ -8,7 +10,9 @@ class LessonProgressBase(BaseModel):
 
 
 class LessonProgressCreate(LessonProgressBase):
-    pass
+    updated_at: datetime = Field(
+        default_factory=lambda: pendulum.now(pendulum.UTC)
+    )
 
 
 class LessonProgressUpdate(LessonProgressBase):

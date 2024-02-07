@@ -37,4 +37,13 @@ def get_course_progress(course_id: int,
     return crud.progress.get_course_progress(course_id=course_id, db=db)
 
 
+@router.get("/statistics/")
+def get_courses_statistics(
+        db: Session = Depends(get_db),
+        current_user: models.User = Depends(get_current_user)):
+    if statistics := crud.progress.get_user_statistics(current_user.id, db):
+        return statistics
+    raise HTTPException(detail="Something wrong has happened.", status_code=status.HTTP_510_NOT_EXTENDED)
+
+
 progress_router = router
