@@ -3,7 +3,8 @@ from app.endpoints import (
     course_router,
     lesson_router,
     lesson_file_router,
-    progress_router
+    progress_router,
+    websocket_router,
 )
 from fastapi import APIRouter
 
@@ -42,5 +43,12 @@ api_router.include_router(
     router=progress_router,
     prefix='/progress',
     tags=['progress'],
+    responses={418: {'description': 'I"m a teapot =)'}}
+)
+
+api_router.include_router(
+    router=websocket_router,
+    prefix='/websocket',
+    tags=['websocket'],
     responses={418: {'description': 'I"m a teapot =)'}}
 )
