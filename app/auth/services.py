@@ -1,4 +1,7 @@
+import re
 from datetime import timedelta, datetime
+from typing import Any
+
 from jose import jwt
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
@@ -13,6 +16,13 @@ pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 SECRET_KEY = auth_settings.SECRET_KEY
 ALGORITHM = auth_settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = auth_settings.ACCESS_TOKEN_EXPIRE_MINUTES
+
+
+def validate_password(password: str) -> Any:
+    regex = re.compile(
+        r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*._])(?!.*\s).{5,15}$"
+    )
+    return re.fullmatch(regex, password)
 
 
 def verify_password(plain_password, hashed_password):

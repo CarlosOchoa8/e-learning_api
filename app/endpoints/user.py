@@ -15,21 +15,37 @@ def login_for_access_token(authenticate: schemas.UserAuthSchema, db: Session = D
     return schemas.Token(access_token=access_token, token_type="bearer")
 
 
-@router.post("/create/", description='Create an user.', response_model=schemas.UserResponseSchema)
-def create_user(user_in: schemas.UserCreateSchema,
-                db: Session = Depends(get_db)):
+@router.post("/register", description="Register user.", response_model=schemas.UserResponseSchema)
+def register(user_in: schemas.UserCreateSchema, db: Session = Depends(get_db)):
     if crud.user.get_by_username(db=db, username=user_in.username):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=f'Already exists an user with username {user_in.username}')
     if crud.user.get_by_email(db=db, email=user_in.email):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=f'Already exists an user with email {user_in.email}')
+
     try:
-        user_created = (crud.user.create(db=db, obj_in=user_in))
-        return schemas.UserResponseSchema(**user_created.__dict__)
+        return crud.user.create(db=db, obj_in=user_in)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail='Has been occurred a problem trying create the user.') from e
+                            detail='Has been occurred a problem trying to register.') from e
+
+
+# @router.post("/create/", description='Create an user.', response_model=schemas.UserResponseSchema)
+# def create_user(user_in: schemas.UserCreateSchema,
+#                 db: Session = Depends(get_db)):
+#     if crud.user.get_by_username(db=db, username=user_in.username):
+#         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+#                             detail=f'Already exists an user with username {user_in.username}')
+#     if crud.user.get_by_email(db=db, email=user_in.email):
+#         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+#                             detail=f'Already exists an user with email {user_in.email}')
+#     try:
+#         user_created = (crud.user.create(db=db, obj_in=user_in))
+#         return schemas.UserResponseSchema(**user_created.__dict__)
+#     except Exception as e:
+#         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+#                             detail='Has been occurred a problem trying create the user.') from e
 
 
 @router.put('/update/{user_id}', description='Update an user.', response_model=schemas.UserInDBSchema)

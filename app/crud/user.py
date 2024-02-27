@@ -20,6 +20,7 @@ class CRUDUser(CRUDBase[UserModel, schemas.UserCreateSchema, schemas.UserUpdateS
         """Create a ModelType object"""
         obj_in_data = jsonable_encoder(obj_in)
         obj_in_data['password'] = get_password_hash(obj_in_data['password'])
+        obj_in_data.pop("re_password")
         db_obj = self.model(**obj_in_data)  # type: ignore
         db.add(db_obj)
         db.commit()

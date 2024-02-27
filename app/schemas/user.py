@@ -1,5 +1,8 @@
 from typing import Any, ClassVar
-from pydantic import Field, BaseModel, EmailStr, field_validator
+
+from fastapi import HTTPException, status
+from pydantic import Field, BaseModel, EmailStr, field_validator, model_validator
+from app.auth.services import validate_password
 from app.utils import constants
 
 
@@ -9,6 +12,7 @@ class UserBaseSchema(BaseModel):
     first_name: str = Field(min_length=5, max_length=50, examples=['Some First Name'])
     last_name: str = Field(min_length=5, max_length=50, examples=['Some Last Name'])
     email: EmailStr = Field(examples=['Some@Some.Some'])
+    country: str = Field(examples=['México'])
     user_type: constants.UserType = Field(default=constants.UserType.STUDENT)
     phone_number: str   # pendiente utilizar phonenumber from pydantic.extramodels
 
@@ -23,7 +27,23 @@ class UserBaseSchema(BaseModel):
 
 
 class UserCreateSchema(UserBaseSchema):
-    pass
+    re_password: str
+
+    @model_validator(mode="before")
+    def validate_passwords(cls, values):
+        if values["password"] != values["re_password"]:
+            raise HTTPException(
+                detail="Passwords do not match.",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        if not validate_password(values["password"]):
+            raise HTTPException(
+                status_code=400,
+                detail="La contraseña debe tener de 5 a 10 caracteres, 1 letra mayúscula, 1 letra minúscula, 1 número, "
+                       "1 signo (! @ # $ % & * . _) y no debe contener espacios",
+            )
+
+        return values
 
 
 class UserUpdateSchema(BaseModel):

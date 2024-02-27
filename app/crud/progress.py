@@ -1,13 +1,15 @@
 """
 Generate an Object of CRUD
 """
+from typing import Any
 
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy import func, and_
 from sqlalchemy.orm import Session
 
 from app import models
 from app import schemas
-from app.config.database.crud_base import CRUDBase
+from app.config.database.crud_base import CRUDBase, CreateSchemaType, ModelType
 from app.models import Progress
 
 
@@ -16,6 +18,19 @@ class CRUDProgress(CRUDBase[Progress, schemas.LessonProgressCreate, schemas.Less
     Args:
         CRUDBase ([Item, ItemCreate, ItemUpdate])
     """
+    def create(self, db: Session, obj_in: CreateSchemaType) -> models.Progress:
+        obj_in_data = jsonable_encoder(obj_in)
+        db_obj = self.model(**obj_in_data)  # type: ignore
+
+        get_course = db.query(self.model).join(models.Lesson).filter(self.model.lesson_id == obj_in.lesson_id).all()
+        print("get_course")
+        print(get_course.lesson_id)
+        1/0
+        course_registration_obj = models.UserCourse(**obj_in_data)
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
 
     def get_course_progress(self, course_id: int, db: Session) -> str:
         """
